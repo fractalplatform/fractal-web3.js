@@ -1,0 +1,26 @@
+{
+  "name": "fractal-web3",
+  "version": "1.0.52",
+  "description": "Fractal Web3 JS API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syslink/fractal.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/syslink/fractal.js/issues"
+  },
+  "homepage": "https://github.com/syslink/fractal.js#readme",
+  "dependencies": {
+    "eth-crypto": "^1.3.3",
+    "ethereumjs-abi": "^0.6.7",
+    "ethereumjs-util": "^6.1.0",
+    "rlp": "^2.2.3"
+  }
+}
