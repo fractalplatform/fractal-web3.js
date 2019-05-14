@@ -41,8 +41,8 @@ import * as fractal from 'fractal-web3';
 // 交易完整结构体：{chainId, gasAssetId, gasPrice, actions:[{actionType, accountName, nonce, gasLimit, toAccountName, assetId, amount, payload, remark}]}
 // 其中chainId, gasAssetId, nonce, payload 以及 remark这几个参数如果不传，sdk会根据实际情况自动填充
 txInfo = {...}
-signInfo1 = fractal.ft.signTx(txInfo, privateKey1);  //获取第一个签名
-signInfo2 = fractal.ft.signTx(txInfo, privateKey2);  //获取第二个签名
+signInfo1 = await fractal.ft.signTx(txInfo, privateKey1);  //获取第一个签名
+signInfo2 = await fractal.ft.signTx(txInfo, privateKey2);  //获取第二个签名
 multiSignInfos = [{signInfo1, [0]}, {signInfo2, [1]}];
 fractal.ft.sendMultiSigTransaction(txInfo, multiSignInfos).then(txHash => {...}).catch(error => {...});  // 发送多签名交易
 ```
@@ -52,7 +52,7 @@ demo3: 发送单签名交易
 import * as fractal from 'fractal-web3';
 
 txInfo = {...}
-signInfo1 = fractal.ft.signTx(txInfo, privateKey1);
+signInfo1 = await fractal.ft.signTx(txInfo, privateKey1);
 fractal.ft.sendSingleSigTransaction(txInfo, signInfo1).then(txHash => {...}).catch(error => {...});
 ```
 demo4: 合约方法调用
@@ -78,7 +78,7 @@ import * as fractal from 'fractal-web3';
 // 调用合约的hello方法
 const payload = fractal.utils.getContractPayload('hello', ['string'], ['fractal blockchain']); //payload会填入txInfo中
 const txInfo = {...}  // 构造合约交易对象
-signInfo1 = fractal.ft.signTx(txInfo, privateKey1);
+signInfo1 = await fractal.ft.signTx(txInfo, privateKey1);
 fractal.ft.sendSingleSigTransaction(txInfo, signInfo1).then(txHash => {...}).catch(error => {...});
 
 // 调用合约的say方法，由于say是一个constant类型的方法，只需要从链上读取数据，因此不需要发送交易，只要调用rpc中的call方法即可获得结果

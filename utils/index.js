@@ -28,7 +28,7 @@ export function hex2Bytes(str) {
   let len = str.length;
   let hexA = new Uint8Array();
 
-  if (str[0] === '0' && (str[1] === 'x' || str[1] === 'X')) {
+  if (len >= 2 && str[0] === '0' && (str[1] === 'x' || str[1] === 'X')) {
     pos = 2;
     len -= 2;
   }
