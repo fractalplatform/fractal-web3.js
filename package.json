@@ -1,6 +1,6 @@
 {
   "name": "fractal-web3",
-  "version": "1.0.57",
+  "version": "1.0.58",
   "description": "Fractal Web3 JS API",
   "main": "index.js",
   "scripts": {
