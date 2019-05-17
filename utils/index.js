@@ -62,4 +62,37 @@ export function getContractPayload(funcName, parameterTypes, parameterValues) {
   return abiUtil.methodID(funcName, parameterTypes).toString('hex') + abiUtil.rawEncode(parameterTypes, parameterValues).toString('hex');
 }
 
-export default { hex2Bytes, postToNode, getRlpData, setProvider, getContractPayload };
+export function parseContractTxPayload(abiInfo, payload) {
+  const retInfo = {};
+  const abiInfo = JSON.parse(abiInfo);
+  if (payload.indexOf('0x') == 0) {
+    payload = payload.substr(2);
+  }
+  const encodedFunc = payload.substr(0, 8);
+  for (const interfaceInfo of abiInfo) {
+    if (interfaceInfo.type === 'function') {
+      const funcName = interfaceInfo.name;
+      const parameterTypes = [];
+      for (const input of interfaceInfo.inputs) {
+        parameterTypes.push(input.type);
+      }
+      const methodId = abiUtil.methodID(funcName, parameterTypes).toString('hex');
+      if (methodId == encodedFunc) {
+        retInfo.funcName = funcName;
+        retInfo.parameterInfos = [];
+        const decodedValues = abiUtil.rawDecode(parameterTypes, payload.substr(8));
+        for (let i = 0; i < decodedValues.length; i++) {
+          const parameterInfo = {};
+          parameterInfo.name = interfaceInfo.inputs[i].name;
+          parameterInfo.type = parameterTypes[i];
+          parameterInfo.value = decodedValues[i];
+          retInfo.parameterInfos.push(parameterInfo);
+        }
+        return retInfo;
+      }
+    }
+  }
+  return null;
+}
+
+export default { hex2Bytes, postToNode, getRlpData, setProvider, getContractPayload, parseContractTxPayload };
