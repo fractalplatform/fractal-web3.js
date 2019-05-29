@@ -1,12 +1,29 @@
 import * as abiUtil from 'ethereumjs-abi';
 import * as ft from '../ft'
 let provider = 'http://127.0.0.1:8545';
+let wsToNode = null;
 
 export function setProvider(providerInfo) {
   provider = providerInfo;
   ft.getChainConfig().then(chainConfig => {
     ft.setChainId(chainConfig.chainId);
   });
+}
+
+export function openWebSocket(wsAddr) {
+  wsToNode = new WebSocket(wsAddr);
+  websocket.onopen = function(evt) { 
+    console.log('ws open success');
+  }; 
+  websocket.onclose = function(evt) { 
+    console.log('ws close success');
+  }; 
+  websocket.onmessage = function(evt) { 
+    console.log('get message:' + evt.data);
+  }; 
+  websocket.onerror = function(evt) { 
+    console.log('get error:' + evt.data);
+  }; 
 }
 
 // data = []
@@ -16,6 +33,9 @@ export function getRlpData(data) {
 
 export async function postToNode(dataToNode) {
   const resp = await fetch(provider, {headers: { "Content-Type": "application/json" }, method: 'POST', body: dataToNode.data});
+  if (resp == null) {
+    throw 'RPC调用失败：' + dataToNode.data;
+  }
   const response = await resp.json();
   if (response.error != null) {
     throw response.error.message;
@@ -62,13 +82,34 @@ export function getContractPayload(funcName, parameterTypes, parameterValues) {
   return abiUtil.methodID(funcName, parameterTypes).toString('hex') + abiUtil.rawEncode(parameterTypes, parameterValues).toString('hex');
 }
 
-export function parseContractTxPayload(abiInfo, payload) {
-  const retInfo = {};
-  const abiInfo = JSON.parse(abiInfo);
-  if (payload.indexOf('0x') == 0) {
-    payload = payload.substr(2);
+export function isValidABI(abiInfoStr) {
+  try {
+    const abiInfo = JSON.parse(abiInfoStr);
+    if (!Array.isArray(abiInfo)) {
+      return false;
+    }
+    for (const abi of abiInfo) {
+      if (abi.type == null) {
+        return false;
+      }
+    }
+    return true;
+  } catch (error) {
+    return false;
   }
-  const encodedFunc = payload.substr(0, 8);
+}
+
+export function parseContractTxPayload(abiInfoStr, payload) {
+  if (!isValidABI(abiInfoStr)) {
+    return null;
+  }
+  const retInfo = {};
+  const abiInfo = JSON.parse(abiInfoStr);
+  let startIndex = 0;
+  if (payload.indexOf('0x') == 0) {
+    startIndex = 2;
+  }
+  const encodedFunc = payload.substr(startIndex, 8);
   for (const interfaceInfo of abiInfo) {
     if (interfaceInfo.type === 'function') {
       const funcName = interfaceInfo.name;
@@ -80,7 +121,7 @@ export function parseContractTxPayload(abiInfo, payload) {
       if (methodId == encodedFunc) {
         retInfo.funcName = funcName;
         retInfo.parameterInfos = [];
-        const decodedValues = abiUtil.rawDecode(parameterTypes, payload.substr(8));
+        const decodedValues = abiUtil.rawDecode(parameterTypes, Buffer.from(payload.substr( 8 + startIndex), 'hex'));
         for (let i = 0; i < decodedValues.length; i++) {
           const parameterInfo = {};
           parameterInfo.name = interfaceInfo.inputs[i].name;
@@ -95,4 +136,8 @@ export function parseContractTxPayload(abiInfo, payload) {
   return null;
 }
 
-export default { hex2Bytes, postToNode, getRlpData, setProvider, getContractPayload, parseContractTxPayload };
+export function isEmptyObj(obj) {
+  return obj == null || obj == '';
+}
+
+export default { isEmptyObj, hex2Bytes, postToNode, getRlpData, setProvider, getContractPayload, isValidABI, parseContractTxPayload };

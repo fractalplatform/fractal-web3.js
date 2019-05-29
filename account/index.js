@@ -42,7 +42,7 @@ export async function getAccountByName(accountName) {
 
 export async function getAccountById(accountId) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
-    method: 'account_getAccountByName',
+    method: 'account_getAccountByID',
     params: [accountId],
     id: 1 });
   return utils.postToNode({
