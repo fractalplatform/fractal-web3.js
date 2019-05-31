@@ -45,7 +45,7 @@ signInfo1 = await fractal.ft.signTx(txInfo, privateKey1);  //获取第一个签�
 signInfo2 = await fractal.ft.signTx(txInfo, privateKey2);  //获取第二个签名
 multiSignInfos = [{signInfo1, [0]}, {signInfo2, [1]}];
 parentIndex = 0; // 签名级别，如果为0，表示账号级别大于等于自己的账号都能签名，如果为1，表示账号级别大于等于自己父账号的账号都能签名
-fractal.ft.sendMultiSigTransaction(txInfo, multiSignInfos, 0).then(txHash => {...}).catch(error => {...});  // 发送多签名交易
+fractal.ft.sendSeniorSigTransaction(txInfo, multiSignInfos, 0).then(txHash => {...}).catch(error => {...});  // 发送多签名交易
 ```
 demo3: 发送单签名交易
 
