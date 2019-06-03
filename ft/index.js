@@ -256,5 +256,5 @@ export async function sendSeniorSigTransaction(txInfo, multiSignInfos, parentInd
 export default { getChainId, setChainId, getCurrentBlock, getBlockByHash, getBlockByNum, getTransactionByHash,
   getTransactionReceipt, getSuggestionGasPrice,
   getTxsByAccount, getTxsByBloom, getChainConfig,
-  getInternalTxsByAccount, getInternalTxsByBloom, getInternalTxByHash,
+  getInternalTxsByAccount, getInternalTxsByBloom, getInternalTxByHash, packTx,
   signTx, sendSingleSigTransaction, sendSeniorSigTransaction, call, estimateGas};
