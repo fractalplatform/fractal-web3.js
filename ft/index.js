@@ -168,7 +168,7 @@ function getRSV(signature) {
   return { r, s, v };
 }
 
-async function packTx(txInfo) {
+export async function packTx(txInfo) {
   if (utils.isEmptyObj(txInfo.chainId)) {
     txInfo.chainId = chainId;
   }
@@ -192,6 +192,7 @@ async function packTx(txInfo) {
       action.signData = [];
     }
   }
+  return txInfo;
 }
 /**
  txInfo = {chainId, gasAssetId, gasPrice, actions:[{actionType, accountName, nonce, gasLimit, toAccountName, assetId, amount, payload, remark}]}
