@@ -188,9 +188,6 @@ export async function packTx(txInfo) {
     if (action.remark == null) {
       action.remark = '';
     }
-    if (utils.isEmptyObj(action.signData)) {
-      action.signData = [];
-    }
   }
   return txInfo;
 }
