@@ -214,6 +214,24 @@ export async function signTx(txInfo, privateKey) {
   return signature;
 }
 
+export async function recoverSignedTx(txInfo, signature) {
+  const actionHashs = [];
+  for (const action of txInfo.actions) {
+    const { accountName, actionType, nonce, gasLimit, toAccountName, assetId, amount, remark } = action;
+    let { payload } = action;
+    payload = utils.hex2Bytes(payload);
+    const actionHash = EthUtil.rlphash([accountName, actionType, nonce, toAccountName, gasLimit, amount, payload, assetId, remark, txInfo.chainId, 0, 0]);
+
+    actionHashs.push(actionHash);
+  }
+  const merkleRoot = EthUtil.keccak(actionHashs[0]);
+
+  const txHash = EthUtil.rlphash([merkleRoot, txInfo.gasAssetId, txInfo.gasPrice]).toString('hex');
+
+  const address = EthCrypto.recover(signature, txHash);
+  return address;
+}
+
 /* 
 txInfo: object of transaction info: {chainId, gasAssetId, gasPrice, actions:[{actionType, accountName, nonce, gasLimit, toAccountName, assetId, amount, payload, remark}]},
         if you don't pass chainId, gasAssetId, nonce, payload and remark, it will use default value.
@@ -255,4 +273,4 @@ export default { getChainId, setChainId, getCurrentBlock, getBlockByHash, getBlo
   getTransactionReceipt, getSuggestionGasPrice,
   getTxsByAccount, getTxsByBloom, getChainConfig,
   getInternalTxsByAccount, getInternalTxsByBloom, getInternalTxByHash, packTx,
-  signTx, sendSingleSigTransaction, sendSeniorSigTransaction, call, estimateGas};
+  signTx, recoverSignedTx, sendSingleSigTransaction, sendSeniorSigTransaction, call, estimateGas};

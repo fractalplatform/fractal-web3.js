@@ -1,29 +1,49 @@
 import * as utils from '../utils';
 
-export async function getCandidate(accountName) {
+export async function getCandidate(epoch, accountName) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'dpos_candidate',
-    params: [accountName],
+    params: [epoch, accountName],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
   });
 }
 
-export async function getCandidateByHeight(blockHeight, accountName) {
+export async function getCandidateNumber(epoch) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
-    method: 'dpos_candidateByHeight',
-    params: [blockHeight, accountName],
+    method: 'dpos_candidatesSize',
+    params: [epoch],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
   });
 }
 
-export async function getCandidates(bDetailInfo) {
+export async function getCandidates(epoch, bDetailInfo) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'dpos_candidates',
-    params: [bDetailInfo],
+    params: [epoch, bDetailInfo],
+    id: 1 });
+  return utils.postToNode({
+    data: dataToSrv,
+  });
+}
+
+export async function getActivedCandidateNumber(epoch) {
+  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
+    method: 'dpos_getActivedCandidateSize',
+    params: [epoch],
+    id: 1 });
+  return utils.postToNode({
+    data: dataToSrv,
+  });
+}
+
+export async function getActivedCandidate(epoch, index) {
+  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
+    method: 'dpos_getActivedCandidate',
+    params: [epoch, index],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
@@ -50,40 +70,20 @@ export async function getDposIrreversibleInfo() {
   });
 }
 
-export async function getValidCandidates() {
+export async function getValidCandidates(epoch) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'dpos_validCandidates',
-    params: [],
+    params: [epoch],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
   });
 }
 
-export async function getValidCandidatesByHeight(blockHeight) {
-  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
-    method: 'dpos_validCandidatesByHeight',
-    params: [blockHeight],
-    id: 1 });
-  return utils.postToNode({
-    data: dataToSrv,
-  });
-}
-
-export async function getAvailableStake(accountName) {
+export async function getAvailableStake(epoch, accountName) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'dpos_availableStake',
-    params: [accountName],
-    id: 1 });
-  return utils.postToNode({
-    data: dataToSrv,
-  });
-}
-
-export async function getAvailableStakeByHeight(blockHeight, accountName) {
-  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
-    method: 'dpos_availableStake',
-    params: [blockHeight, accountName],
+    params: [epoch, accountName],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
@@ -91,41 +91,20 @@ export async function getAvailableStakeByHeight(blockHeight, accountName) {
 }
 
 // get all voters info who vote to the candidate
-export async function getVotersByCandidate(candidateName, bDetailInfo) {
+export async function getVotersByCandidate(epoch, candidateName, bDetailInfo) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'dpos_votersByCandidate',
-    params: [candidateName, bDetailInfo],
+    params: [epoch, candidateName, bDetailInfo],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
   });
 }
-
-export async function getVotersByCandidateByHeight(blockHeight, candidateName, bDetailInfo) {
-  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
-    method: 'dpos_votersByCandidateByHeight',
-    params: [blockHeight, candidateName, bDetailInfo],
-    id: 1 });
-  return utils.postToNode({
-    data: dataToSrv,
-  });
-}
-
 // get voter's all vote info
-export async function getVotersByVoter(voterName, bDetailInfo) {
+export async function getVotersByVoter(epoch, voterName, bDetailInfo) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'dpos_votersByVoter',
-    params: [voterName, bDetailInfo],
-    id: 1 });
-  return utils.postToNode({
-    data: dataToSrv,
-  });
-}
-
-export async function getVotersByVoterByHeight(blockHeight, voterName, bDetailInfo) {
-  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
-    method: 'dpos_votersByVoterByHeight',
-    params: [blockHeight, voterName, bDetailInfo],
+    params: [epoch, voterName, bDetailInfo],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
@@ -142,29 +121,20 @@ export async function getNextValidCandidates() {
   });
 }
 
-export async function getNextValidCandidatesByHeight(blockHeight) {
-  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
-    method: 'dpos_nextValidCandidatesByHeight',
-    params: [blockHeight],
-    id: 1 });
-  return utils.postToNode({
-    data: dataToSrv,
-  });
-}
 
-export async function getSnapShotTime() {
+export async function getSnapShotTime(epoch) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'dpos_snapShotTime',
-    params: [],
+    params: [epoch],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
   });
 }
 
-export async function getSnapShotTimeByHeight(blockHeight) {
+export async function getEpochByHeight(blockHeight) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
-    method: 'dpos_snapShotTimeByHeight',
+    method: 'dpos_epoch',
     params: [blockHeight],
     id: 1 });
   return utils.postToNode({
@@ -172,8 +142,28 @@ export async function getSnapShotTimeByHeight(blockHeight) {
   });
 }
 
-export default { getCandidate, getCandidateByHeight, getDposIrreversibleInfo, getCandidates, 
-  getVotersByCandidate, getVotersByCandidateByHeight, getVotersByVoter, getVotersByVoterByHeight,
-  getAvailableStake, getAvailableStakeByHeight, getValidCandidates, getValidCandidatesByHeight,
-  getDposInfo, getNextValidCandidates, getNextValidCandidatesByHeight, getSnapShotTime, getSnapShotTimeByHeight, 
-   };
+export async function getPreEpoch(epoch) {
+  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
+    method: 'dpos_prevEpoch',
+    params: [epoch],
+    id: 1 });
+  return utils.postToNode({
+    data: dataToSrv,
+  });
+}
+
+export async function getNextEpoch(epoch) {
+  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
+    method: 'dpos_nextEpoch',
+    params: [epoch],
+    id: 1 });
+  return utils.postToNode({
+    data: dataToSrv,
+  });
+}
+
+export default { getCandidate, getDposIrreversibleInfo, getCandidates, getCandidateNumber,
+  getVotersByCandidate, getVotersByVoter, getAvailableStake, getValidCandidates, 
+  getDposInfo, getNextValidCandidates, getSnapShotTime,  getEpochByHeight, getPreEpoch, getNextEpoch, 
+  getActivedCandidate, getActivedCandidateNumber,
+};
