@@ -26,7 +26,7 @@ const nodeInfo = 'htp://127.0.0.1:8545';
 fractal.utils.setProvider(nodeInfo);  //设置节点rpc信息
 
 try {
-  const accountInfo = await fractal.account.getAccountByName('fractal.admin');
+  const accountInfo = await fractal.account.getAccountByName('fractal.admin', true);
   ...
 } catch (error) {
   console(error);  
@@ -44,7 +44,7 @@ txInfo = {...}
 signInfo1 = await fractal.ft.signTx(txInfo, privateKey1);  //获取第一个签名
 signInfo2 = await fractal.ft.signTx(txInfo, privateKey2);  //获取第二个签名
 multiSignInfos = [{signInfo1, [0]}, {signInfo2, [1]}];
-parentIndex = 0; // 签名级别，如果为0，表示账号级别大于等于自己的账号都能签名，如果为1，表示账号级别大于等于自己父账号的账号都能签名
+parentIndex = 0; // 签名级别，如果为0，表示是自己账号签名，如果为1，表示父账号签名，如果为2，表示父父账号签名
 fractal.ft.sendSeniorSigTransaction(txInfo, multiSignInfos, 0).then(txHash => {...}).catch(error => {...});  // 发送多签名交易
 ```
 demo3: 发送单签名交易
