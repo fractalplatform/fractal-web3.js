@@ -30,20 +30,20 @@ export async function getAssetInfoByName(assetName) {
   });
 }
 
-export async function getAccountByName(accountName) {
+export async function getAccountByName(accountName, showAllAsset) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'account_getAccountByName',
-    params: [accountName],
+    params: [accountName, showAllAsset],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
   });
 }
 
-export async function getAccountById(accountId) {
+export async function getAccountById(accountId, showAllAsset) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'account_getAccountByID',
-    params: [accountId],
+    params: [accountId, showAllAsset],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
