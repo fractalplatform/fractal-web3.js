@@ -30,20 +30,40 @@ export async function getAssetInfoByName(assetName) {
   });
 }
 
-export async function getAccountByName(accountName, showAllAsset) {
+export async function getAccountByName(accountName) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'account_getAccountByName',
-    params: [accountName, showAllAsset],
+    params: [accountName],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
   });
 }
 
-export async function getAccountById(accountId, showAllAsset) {
+export async function getAccountById(accountId) {
   const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
     method: 'account_getAccountByID',
-    params: [accountId, showAllAsset],
+    params: [accountId],
+    id: 1 });
+  return utils.postToNode({
+    data: dataToSrv,
+  });
+}
+
+export async function getAccountExByName(accountName) {
+  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
+    method: 'account_getAccountExByName',
+    params: [accountName],
+    id: 1 });
+  return utils.postToNode({
+    data: dataToSrv,
+  });
+}
+
+export async function getAccountExById(accountId) {
+  const dataToSrv = JSON.stringify({ jsonrpc: '2.0',
+    method: 'account_getAccountExByID',
+    params: [accountId],
     id: 1 });
   return utils.postToNode({
     data: dataToSrv,
@@ -120,5 +140,5 @@ export async function getSnapshotByTime(whichOne, time) {
   });
 }
 
-export default { getNonce, getAssetInfoById, getAssetInfoByName, getAccountByName, getAccountById, isAccountExist, getAccountBalanceById,
+export default { getNonce, getAssetInfoById, getAssetInfoByName, getAccountByName, getAccountById, getAccountExByName, getAccountExById, isAccountExist, getAccountBalanceById,
   getCode, getAccountBalanceByTime };

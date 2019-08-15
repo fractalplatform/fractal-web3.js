@@ -26,7 +26,7 @@ const nodeInfo = 'htp://127.0.0.1:8545';
 fractal.utils.setProvider(nodeInfo);  //设置节点rpc信息
 
 try {
-  const accountInfo = await fractal.account.getAccountByName('fractal.admin', true);
+  const accountInfo = await fractal.account.getAccountByName('fractal.admin');
   ...
 } catch (error) {
   console(error);  
