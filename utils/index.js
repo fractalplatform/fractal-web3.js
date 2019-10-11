@@ -82,9 +82,8 @@ export function getContractPayload(funcName, parameterTypes, parameterValues) {
   return abiUtil.methodID(funcName, parameterTypes).toString('hex') + abiUtil.rawEncode(parameterTypes, parameterValues).toString('hex');
 }
 
-export function isValidABI(abiInfoStr) {
+export function isValidABI(abiInfo) {
   try {
-    const abiInfo = JSON.parse(abiInfoStr);
     if (!Array.isArray(abiInfo)) {
       return false;
     }
@@ -99,12 +98,11 @@ export function isValidABI(abiInfoStr) {
   }
 }
 
-export function parseContractTxPayload(abiInfoStr, payload) {
-  if (!isValidABI(abiInfoStr)) {
+export function parseContractTxPayload(abiInfo, payload) {
+  if (!isValidABI(abiInfo)) {
     return null;
   }
   const retInfo = {};
-  const abiInfo = JSON.parse(abiInfoStr);
   let startIndex = 0;
   if (payload.indexOf('0x') == 0) {
     startIndex = 2;
