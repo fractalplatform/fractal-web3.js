@@ -1,4 +1,5 @@
 import * as abiUtil from 'ethereumjs-abi';
+import {AbiCoder as EthersAbiCoder} from 'ethers/utils/abi-coder';
 import * as ft from '../ft'
 let provider = 'http://127.0.0.1:8545';
 let wsToNode = null;
@@ -134,8 +135,47 @@ export function parseContractTxPayload(abiInfo, payload) {
   return null;
 }
 
+// 对合约调用返回的rlp编码结果进行解析
+// outputs: 即ABI中的outputs
+// bytes: 合约调用返回的结果
+export function parseContractInvokeResult(outputs, bytes) {
+  if (Array.isArray(outputs) && outputs.length === 0) {
+    throw new Error('Empty outputs array given!');
+  }
+
+  if (!bytes || bytes === '0x' || bytes === '0X') {
+      throw new Error(`Invalid bytes string given: ${bytes}`);
+  }
+
+  const ethersAbiCoder = new EthersAbiCoder()
+  const result = ethersAbiCoder.decode(outputs, bytes);
+  let returnValues = {};
+  let decodedValue;
+
+  if (Array.isArray(result)) {
+    if (outputs.length > 1) {
+      outputs.forEach((output, i) => {
+        decodedValue = result[i];
+
+        if (decodedValue === '0x') {
+          decodedValue = null;
+        }
+
+        if (isObject(output) && output.name) {
+          returnValues[output.name] = decodedValue;
+        }
+      });
+
+      return returnValues;
+    }
+
+    return result;
+  }
+}
+
 export function isEmptyObj(obj) {
   return obj == null || obj == '';
 }
 
-export default { isEmptyObj, hex2Bytes, postToNode, getRlpData, setProvider, getContractPayload, isValidABI, parseContractTxPayload };
+export default { isEmptyObj, hex2Bytes, postToNode, getRlpData, setProvider, 
+                 getContractPayload, isValidABI, parseContractTxPayload, parseContractInvokeResult };
