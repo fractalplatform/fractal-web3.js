@@ -3,36 +3,40 @@
 ```
 npm i fractal-web3 -S
 
-import * as fractal from 'fractal-web3'; 
+import * as fractal from 'fractal-web3';
 ```
 
-根据rpc功能划分了不同的域：
-- fractal.account.*: 包括查看账户、资产等功能
-- fractal.dpos.*: 包括查看竞选、出块节点信息以及dpos共识相关信息等功能
-- fractal.ft.*: 包括查看区块、交易信息以及签名、发送交易等功能
-- fractal.fee.*: 包括查看不同账户手续费的功能
-- fractal.miner.*: 包括启动挖矿、停止挖矿、设置coinbase等功能
-- fractal.p2p.*: 包括增加、删除节点等功能
-- fractal.txpool.*: 包括获取txpool信息以及设置gas price等功能
-- fractal.utils.*: 包括rlp编码、合约payload编码等功能
-> rpc文档：https://github.com/fractalplatform/fractal/wiki/JSON-RPC
+根据 rpc 功能划分了不同的域：
+
+-   fractal.account.\*: 包括查看账户、资产等功能
+-   fractal.dpos.\*: 包括查看竞选、出块节点信息以及 dpos 共识相关信息等功能
+-   fractal.ft.\*: 包括查看区块、交易信息以及签名、发送交易等功能
+-   fractal.fee.\*: 包括查看不同账户手续费的功能
+-   fractal.miner.\*: 包括启动挖矿、停止挖矿、设置 coinbase 等功能
+-   fractal.p2p.\*: 包括增加、删除节点等功能
+-   fractal.txpool.\*: 包括获取 txpool 信息以及设置 gas price 等功能
+-   fractal.utils.\*: 包括 rlp 编码、合约 payload 编码等功能
+    > rpc 文档：https://github.com/fractalplatform/fractal/wiki/JSON-RPC
 
 demo1：设置节点信息、查看账户信息
-> 节点rpc默认是htp://127.0.0.1:8545，如不是，必须先设置好节点信息，才可进行后续操作
+
+> 节点 rpc 默认是 htp://127.0.0.1:8545，如不是，必须先设置好节点信息，才可进行后续操作
+
 ```
 import * as fractal from 'fractal-web3';
 
-const nodeInfo = 'htp://127.0.0.1:8545';  
+const nodeInfo = 'htp://127.0.0.1:8545';
 fractal.utils.setProvider(nodeInfo);  //设置节点rpc信息
 
 try {
   const accountInfo = await fractal.account.getAccountByName('fractal.admin');
   ...
 } catch (error) {
-  console(error);  
+  console(error);
 }
 
 ```
+
 demo2: 发送多签名交易
 
 ```
@@ -47,6 +51,7 @@ multiSignInfos = [{signInfo1, [0]}, {signInfo2, [1]}];
 parentIndex = 0; // 签名级别，如果为0，表示是自己账号签名，如果为1，表示父账号签名，如果为2，表示父父账号签名
 fractal.ft.sendSeniorSigTransaction(txInfo, multiSignInfos, 0).then(txHash => {...}).catch(error => {...});  // 发送多签名交易
 ```
+
 demo3: 发送单签名交易
 
 ```
@@ -56,12 +61,15 @@ txInfo = {...}
 signInfo1 = await fractal.ft.signTx(txInfo, privateKey1, 0);
 fractal.ft.sendSingleSigTransaction(txInfo, signInfo1).then(txHash => {...}).catch(error => {...});
 ```
+
 demo4: 合约方法调用
-- 合约代码：
+
+-   合约代码：
+
 ```
 contract hello {
     string greeting;
-    
+
     function hello(string _greeting) public {
         greeting = _greeting;
     }
@@ -71,7 +79,8 @@ contract hello {
     }
 }
 ```
-- sdk调用方式
+
+-   sdk 调用方式
 
 ```
 import * as fractal from 'fractal-web3';
