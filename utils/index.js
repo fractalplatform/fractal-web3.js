@@ -173,6 +173,10 @@ export function parseContractInvokeResult(outputs, bytes) {
   }
 }
 
+function isObject(val) {
+  return val != null && typeof val === 'object' && Array.isArray(val) === false;
+}
+
 export function isEmptyObj(obj) {
   return obj == null || obj == '';
 }
