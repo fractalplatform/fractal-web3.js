@@ -2,7 +2,7 @@ import AbstractObservedTransactionMethod from '../../lib/AbstractObservedTransac
 
 export default class SendRawTransactionMethod extends AbstractObservedTransactionMethod {
     /**
-     * @param {AbstractWeb3Module} moduleInstance
+     * @param {FractalModule} moduleInstance
      *
      * @constructor
      */

@@ -39,5 +39,9 @@ export default class ProviderResolver {
             //     return this.providersModuleFactory.createIpcProvider(provider, net);
             // }
         }
+
+        if (typeof provider === 'object') {
+            return provider;
+        }
     }
 }

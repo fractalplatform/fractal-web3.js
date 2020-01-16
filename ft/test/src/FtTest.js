@@ -1,4 +1,5 @@
-import * as functions from '../../src';
+import * as functions from '../../..';
+import {HttpProvider} from '../../../ft-provider/src/ProvidersModuleFactory';
 
 describe('TransactionSigner', () => {
     const chainID = 1;
@@ -33,12 +34,32 @@ describe('TransactionSigner', () => {
         const privateKey = '9c22ff5f21f0b81b113e63f7db6da94fedef11b2119b4088b89664fb9a3cb658';
 
         await expect(signer.sign('contract', txdata, privateKey)).resolves.toEqual({
-            messageHash: '898609654eaa4860b907e6d302640c1008ca5fc21804fc28bb07da15717b9221',
+            messageHash: '0x898609654eaa4860b907e6d302640c1008ca5fc21804fc28bb07da15717b9221',
             rawTransaction:
-                '0xf884e50180843b9aca00830f4240808a7465737473656e6465728d74657374726563697069656e7480018c74657374207061796c6f61648b746573742072656d61726bb8418511d15b86506b1d6b50f8cff905f837e9e8026908861df982e9a50f85d0c0e9481b0244b82d1b473f83f37f249800ebb28a938e21675113fe42e7ad0b5443af26',
+                '0xf88701f884e50180843b9aca00830f4240808a7465737473656e6465728d74657374726563697069656e7480018c74657374207061796c6f61648b746573742072656d61726bb8418511d15b86506b1d6b50f8cff905f837e9e8026908861df982e9a50f85d0c0e9481b0244b82d1b473f83f37f249800ebb28a938e21675113fe42e7ad0b5443af26',
             signature:
                 '0x8511d15b86506b1d6b50f8cff905f837e9e8026908861df982e9a50f85d0c0e9481b0244b82d1b473f83f37f249800ebb28a938e21675113fe42e7ad0b5443af26',
             transactionHash: '0xc2d855afec6c2a69861c4525969b01736d55f721d5d33d52f6f3bda4ecb7772e'
         });
+    });
+});
+
+describe('Ft', () => {
+    const chainID = 1;
+    let ft;
+    let provider = HttpProvider();
+
+    beforeEach(() => {
+        ft = new functions.Ft(chainID, provider);
+    });
+
+    it('sendRawTransaction check', () => {
+        ft.sendRawTransaction(
+            '0xf88701f884e50180843b9aca00830f4240808a7465737473656e6465728d74657374726563697069656e7480018c74657374207061796c6f61648b746573742072656d61726bb8418511d15b86506b1d6b50f8cff905f837e9e8026908861df982e9a50f85d0c0e9481b0244b82d1b473f83f37f249800ebb28a938e21675113fe42e7ad0b5443af26'
+        ).then(console.log);
+
+        // expect(signer.chainID).toStrictEqual(1);
+        // signer.chainID = 2;
+        // expect(signer.chainID).toStrictEqual(2);
     });
 });

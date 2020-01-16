@@ -45,24 +45,22 @@ export default class AbstractObservedTransactionMethod extends AbstractMethod {
     execute() {
         this.beforeExecution(this.moduleInstance);
 
+        console.log('----method->', this.rpcMethod, this.parameters);
+
         this.moduleInstance.currentProvider
             .send(this.rpcMethod, this.parameters)
             .then((transactionHash) => {
                 if (this.callback) {
                     this.callback(false, transactionHash);
-
                     return;
                 }
-
                 this.promiEvent.emit('transactionHash', transactionHash);
             })
             .catch((error) => {
                 if (this.callback) {
                     this.callback(error, null);
-
                     return;
                 }
-
                 this.handleError(error, false, 0);
             });
 

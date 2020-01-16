@@ -1,5 +1,6 @@
 import HProvider from './providers/HttpProvider';
 import PResolver from './resolvers/ProviderResolver';
+import {XMLHttpRequest as XHR} from 'xhr2-cookies';
 
 export default class ProvidersModuleFactory {
     /**
@@ -25,6 +26,44 @@ export default class ProvidersModuleFactory {
      */
     createProviderResolver() {
         return new PResolver(this);
+    }
+
+    /**
+     * Returns a XMLHttpRequest object
+     *
+     * @method createXMLHttpRequest
+     *
+     * @param {String} host
+     * @param {Number} timeout
+     * @param {Array} headers
+     * @param {Object} agent
+     * @param {Boolean} withCredentials
+     *
+     * @returns {XMLHttpRequest}
+     */
+    createXMLHttpRequest(host, timeout, headers, agent, withCredentials) {
+        let request;
+
+        // runtime is of type node
+        if (typeof process !== 'undefined' && process.versions != null && process.versions.node != null) {
+            request = new XHR();
+            request.nodejsSet(agent);
+        } else {
+            request = new XMLHttpRequest();
+        }
+
+        request.open('POST', host, true);
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.timeout = timeout;
+        request.withCredentials = withCredentials;
+
+        if (headers) {
+            headers.forEach((header) => {
+                request.setRequestHeader(header.name, header.value);
+            });
+        }
+
+        return request;
     }
 }
 

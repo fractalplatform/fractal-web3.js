@@ -189,15 +189,12 @@ export default class AbstractMethod {
     setArguments(methodArguments) {
         let parameters = cloneDeep([...methodArguments]);
         let callback = null;
-
         if (parameters.length > this.parametersAmount) {
             if (!isFunction(parameters[parameters.length - 1])) {
                 throw new TypeError("The latest parameter should be a function otherwise it can't be used as callback");
             }
-
             callback = parameters.pop();
         }
-
         this._arguments = {
             callback,
             parameters

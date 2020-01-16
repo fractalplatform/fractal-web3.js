@@ -191,8 +191,9 @@ export default class ContractTx {
      */
     serialize() {
         const items = [[...this.raw.slice(0, 7)], ...this.raw.slice(7, 12)];
-        return rlp.encode(items);
+        return rlp.encode([this.raw[0], items]);
     }
+
     /**
      * returns chain ID
      */

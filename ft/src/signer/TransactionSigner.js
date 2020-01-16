@@ -1,9 +1,7 @@
-import {ContractTx, PluginTx} from '../../../ft-tx/src';
-import * as Utils from '../../../ft-utils/src/utils/Utils';
+import {ContractTx, PluginTx} from '../../../ft-tx/src/TxModuleFactory';
 
 export default class TransactionSigner {
     /**
-     *
      *
      * @param {Number} chainID chain id
      *
@@ -72,13 +70,12 @@ export default class TransactionSigner {
 
         const rlpEncoded = ftTx.serialize().toString('hex');
         const rawTransaction = '0x' + rlpEncoded;
-        const transactionHash = Utils.keccak256(rawTransaction);
 
         return {
-            messageHash: Buffer.from(ftTx.hash(false)).toString('hex'),
+            messageHash: '0x' + Buffer.from(ftTx.hash(false)).toString('hex'),
             signature: '0x' + Buffer.from(ftTx.signature).toString('hex'),
             rawTransaction,
-            transactionHash
+            transactionHash: '0x' + Buffer.from(ftTx.hash(true)).toString('hex')
         };
     }
 }

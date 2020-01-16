@@ -1,4 +1,5 @@
 import FtTransactionSigner from './signer/TransactionSigner';
+import MethodProxy from '../../ft-api/src/proxy/MethodProxy';
 
 export default class FT {
     /**
@@ -8,12 +9,15 @@ export default class FT {
      *
      */
 
-    constructor(provider, chainID, utils) {
+    constructor(provider, methodFactory = null, chainID, utils) {
         this.provider = provider;
         this.utils = utils;
         this._chainID = chainID;
         this._transactionSigner = new FtTransactionSigner(chainID);
         this._currentProvider = provider;
+        if (methodFactory) {
+            return new MethodProxy(this, methodFactory);
+        }
     }
 
     /**
