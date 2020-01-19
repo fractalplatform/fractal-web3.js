@@ -1,5 +1,6 @@
 import FtTransactionSigner from './signer/TransactionSigner';
 import MethodProxy from '../../ft-api/src/proxy/MethodProxy';
+import PayloadFactory from '../../ft-tx/src/transaction/PluginPayload';
 
 export default class FT {
     /**
@@ -12,6 +13,7 @@ export default class FT {
     constructor(provider, methodFactory = null, chainID, utils) {
         this.provider = provider;
         this.utils = utils;
+        this.payload = new PayloadFactory();
         this._chainID = chainID;
         this._transactionSigner = new FtTransactionSigner(chainID);
         this._currentProvider = provider;
